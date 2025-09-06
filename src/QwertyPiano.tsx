@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 /**
@@ -141,13 +141,13 @@ export default function QwertyPiano() {
   const recordStartRef = useRef<number | null>(null);
 
   // Build visual keybed (white + black overlay)
-  const keybed = useMemo(() => {
-    const keys: { key: string; offset: number; sharp: boolean }[] = [];
-    const add = (k: string, sharp = false) => keys.push({ key: k, offset: KEY_TO_OFFSET[k], sharp });
-    WHITE_KEYS.forEach((k) => add(k, false));
-    BLACK_KEYS.forEach((k) => add(k, true));
-    return keys.sort((a, b) => a.offset - b.offset + (a.sharp === b.sharp ? 0 : a.sharp ? 0.5 : -0.5));
-  }, []);
+// const _keybed = useMemo(() => { 
+//     const keys: { key: string; offset: number; sharp: boolean }[] = [];
+//     const add = (k: string, sharp = false) => keys.push({ key: k, offset: KEY_TO_OFFSET[k], sharp });
+//     WHITE_KEYS.forEach((k) => add(k, false));
+//     BLACK_KEYS.forEach((k) => add(k, true));
+//     return keys.sort((a, b) => a.offset - b.offset + (a.sharp === b.sharp ? 0 : a.sharp ? 0.5 : -0.5));
+//   }, []);
 
   const ensureAudio = () => {
     if (!ctxRef.current) {
@@ -213,7 +213,7 @@ export default function QwertyPiano() {
     downSet.current.clear();
     setRenderTick((x) => x + 1);
   };
-  const [renderTick, setRenderTick] = useState(0);
+const [_renderTick, setRenderTick] = useState(0);
 
   // Keyboard handlers
   useEffect(() => {
@@ -271,7 +271,7 @@ export default function QwertyPiano() {
     const sched = () => {
       const now = performance.now() - start;
       recording.forEach((ev) => {
-        if (!ev.__scheduled) (ev as any).__scheduled = false;
+        if (!ev) (ev as any).__scheduled = false;
       });
       recording.forEach((ev) => {
         const evAny = ev as any;
@@ -396,7 +396,7 @@ export default function QwertyPiano() {
         <div className="relative select-none">
           {/* White keys */}
           <div className="flex gap-1 p-3 bg-neutral-900/60 rounded-2xl border border-neutral-800 shadow-lg">
-            {WHITE_KEYS.map((k, i) => {
+            {WHITE_KEYS.map((k) => {
               const isDown = downSet.current.has(k);
               const midi = currentBaseMidi + KEY_TO_OFFSET[k];
               const label = midiToName(midi);
